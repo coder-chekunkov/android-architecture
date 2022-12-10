@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">MVVM-Architecture (Prototype)</string>
+    <string name="base_text">Hello World</string>
+    <string name="text_edit_button">Edit Text</string>
+    <string name="save">Save</string>
+    <string name="cansel">Cansel</string>
+    <string name="new_color">New</string>
+    <string name="change_color">Change Color</string>
+</resources>
