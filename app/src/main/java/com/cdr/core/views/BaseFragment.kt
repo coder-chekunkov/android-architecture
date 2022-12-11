@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment
 /**
  * Base class for all fragments
  */
-abstract class BaseFragment : Fragment() {
+abstract class BaseFragment(layout: Int) : Fragment(layout) {
     /**
      * View-model that manages this fragment
      */
