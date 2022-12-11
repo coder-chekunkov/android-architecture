@@ -6,4 +6,5 @@
     <string name="cansel">Cansel</string>
     <string name="new_color">New</string>
     <string name="change_color">Change Color</string>
+    <string name="change_user">Change User</string>
 </resources>

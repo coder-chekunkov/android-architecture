@@ -1,34 +1,44 @@
 package com.cdr.mvvm_prototype.screens.home
 
+import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.cdr.core.navigator.Navigator
 import com.cdr.core.uiactions.UiActions
 import com.cdr.core.views.BaseViewModel
 import com.cdr.mvvm_prototype.R
-import com.cdr.mvvm_prototype.screens.colors.ColorFragment
-import com.cdr.mvvm_prototype.screens.edit.EditFragment
+import com.cdr.mvvm_prototype.model.SelectedUserListener
+import com.cdr.mvvm_prototype.model.User
+import com.cdr.mvvm_prototype.model.UsersRepository
+import com.cdr.mvvm_prototype.screens.users.UsersListFragment
 
 class HomeViewModel(
     private val navigator: Navigator,
-    uiActions: UiActions
+    private val uiActions: UiActions,
+    private val usersRepository: UsersRepository
 ) : BaseViewModel() {
 
-    private val _state = MutableLiveData<State>()
-    val state: LiveData<State> = _state
+    private val _selectedUser = MutableLiveData<User>()
+    val selectedUser: LiveData<User> = _selectedUser
+    var isNewSelected: Boolean = false
+
+    private val selectedUserListener: SelectedUserListener = {
+        isNewSelected = true
+        _selectedUser.value = it
+    }
 
     init {
-        _state.value = State(text = uiActions.getString(R.string.base_text), color = R.color.grey)
+        usersRepository.addListenerSelected(selectedUserListener)
     }
 
-    fun onEditPressed() = navigator.launch(EditFragment.Screen(_state.value?.text!!))
-    fun onChangeColorPressed() = navigator.launch(ColorFragment.Screen(_state.value?.color!!))
-
-    override fun onResult(result: Any) {
-        super.onResult(result)
-        if (result is String) _state.value = _state.value?.copy(text = result)
-        if (result is Int) _state.value = _state.value?.copy(color = result)
+    fun onChangeUserPressed() = navigator.launch(UsersListFragment.Screen())
+    fun onUserUpdated(view: View, message: String) {
+        uiActions.showSnackbar(view, message, R.color.dark_green)
+        isNewSelected = false
     }
 
-    data class State(val text: String, val color: Int)
+    override fun onCleared() {
+        super.onCleared()
+        usersRepository.removeListenerSelected(selectedUserListener)
+    }
 }
