@@ -3,14 +3,12 @@ package com.cdr.mvvm_prototype.screens.users
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.cdr.core.views.BaseFragment
-import com.cdr.core.views.BaseScreen
-import com.cdr.core.views.HasCustomTitle
-import com.cdr.core.views.screenViewModel
+import com.cdr.core.views.*
 import com.cdr.mvvm_prototype.R
 import com.cdr.mvvm_prototype.databinding.FragmentUsersListBinding
 
-class UsersListFragment : BaseFragment(R.layout.fragment_users_list), HasCustomTitle {
+class UsersListFragment : BaseFragment(R.layout.fragment_users_list), HasCustomTitle,
+    HasCustomAction {
 
     override val viewModel by screenViewModel<UsersListViewModel>()
     private lateinit var binding: FragmentUsersListBinding
@@ -26,8 +24,15 @@ class UsersListFragment : BaseFragment(R.layout.fragment_users_list), HasCustomT
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
     }
 
-    class Screen : BaseScreen
 
     override fun getScreenTitle(): String =
         "${viewModel.screenTitle.value} \uD83D\uDC76"
+
+    override fun getCustomAction(): CustomAction = CustomAction(
+        iconRes = R.drawable.ic_random,
+        textAction = "Random user",
+        onCustomAction = { viewModel.createRandomUser() }
+    )
+
+    class Screen : BaseScreen
 }

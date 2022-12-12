@@ -17,4 +17,12 @@
     <color name="yellow">#FFF176</color>
     <color name="blue">#4FC3F7</color>
     <color name="purple">#BA68C8</color>
+    <color name="navy">#000080</color>
+    <color name="pink">#FF1493</color>
+    <color name="sienna">#A8522D</color>
+    <color name="khaki">#F0E68C</color>
+    <color name="forest_green">#228B22</color>
+    <color name="sky">#87CEFA</color>
+    <color name="olive">#6B8E23</color>
+    <color name="violet">#9400D3</color>
 </resources>

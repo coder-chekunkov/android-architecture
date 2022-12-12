@@ -37,6 +37,11 @@ class UsersListViewModel(
         override fun onMove(user: User, moveBy: Int) = usersRepository.moveUser(user, moveBy)
     }
 
+    fun createRandomUser() {
+        usersRepository.createNewRandomSelectedUser()
+        uiActions.showToast("New random user: ${usersRepository.getSelectedUser()}")
+    }
+
     override fun onCleared() {
         super.onCleared()
         usersRepository.removeListenerList(listListener)

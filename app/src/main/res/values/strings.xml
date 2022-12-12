@@ -3,8 +3,14 @@
     <string name="base_text">Hello World</string>
     <string name="text_edit_button">Edit Text</string>
     <string name="save">Save</string>
-    <string name="cansel">Cansel</string>
+    <string name="cancel">Cancel</string>
     <string name="new_color">New</string>
-    <string name="change_color">Change Color</string>
+    <string name="change_language">Change Language</string>
     <string name="change_user">Change User</string>
+    <string name="message_new_user_and_language">User and Language have been changed!</string>
+    <string name="message_new_user">User has been changed!</string>
+    <string name="message_new_language">Language has been changed!</string>
+    <string name="selected">selected</string>
+    <string name="user_photo_description">User photo</string>
+    <string name="language_image_description">language image</string>
 </resources>

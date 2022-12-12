@@ -55,6 +55,14 @@ class UsersRepository : Repository {
         notifyChangesSelected()
     }
 
+    fun createNewRandomSelectedUser() {
+        val randomId = faker.random().nextInt(1, 50).toLong()
+        val index = users.indexOfFirst { it.id == randomId }
+
+        if (index == -1) throw IllegalArgumentException("Error with random user. Unknown ID.")
+        selectUser(users[index])
+    }
+
     fun removeUser(user: User) {
         val index = findIndex(user)
         if (index == -1) return
@@ -122,5 +130,5 @@ data class User(
     val photo: String,
     val isSelected: Boolean
 ) {
-    override fun toString(): String = "User: {ID -> $id; Name: -> $name}"
+    override fun toString(): String = "User:{id:$id; name: $name}"
 }
