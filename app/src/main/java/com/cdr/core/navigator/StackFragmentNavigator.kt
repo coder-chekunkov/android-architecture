@@ -1,21 +1,26 @@
 package com.cdr.core.navigator
 
+import android.annotation.SuppressLint
+import android.graphics.Color
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import androidx.annotation.AnimRes
 import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import com.cdr.core.views.BaseFragment
-import com.cdr.core.views.BaseScreen
+import com.cdr.core.views.*
 import com.cdr.core.views.BaseScreen.Companion.ARG_SCREEN
-import com.cdr.core.views.HasCustomTitle
+import com.google.android.material.appbar.MaterialToolbar
 
 class StackFragmentNavigator(
     private val activity: AppCompatActivity,
     @IdRes private val containerId: Int,
+    private val toolbar: MaterialToolbar?,
     private val defaultTitle: String,
     private val animations: Animations?,
     private val initialScreenCreator: () -> BaseScreen
@@ -39,14 +44,13 @@ class StackFragmentNavigator(
     /**
      * A method that duplicates the Activity lifecycle-method and launches a new screen if it has not been launched.
      */
+    @SuppressLint("UseSupportActionBar")
     fun onCreate(savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
-            launchFragment(
-                screen = initialScreenCreator(),
-                addToBackStack = false
-            )
+            launchFragment(screen = initialScreenCreator(), addToBackStack = false)
         }
         activity.supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentCallbacks, false)
+        if (toolbar != null) activity.setSupportActionBar(toolbar)
     }
 
     /**
@@ -83,18 +87,41 @@ class StackFragmentNavigator(
     fun notifyScreenUpdates() {
         val f = activity.supportFragmentManager.findFragmentById(containerId)
 
-        // more than 1 screen -> show back button in the toolbar
-        if (activity.supportFragmentManager.backStackEntryCount > 0)
-            activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        else activity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        // if toolbar is exist on activity
+        if (toolbar != null) {
+            // more than 1 screen -> show back button in the toolbar
+            if (activity.supportFragmentManager.backStackEntryCount > 0)
+                activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            else activity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
 
-        // fragment has custom screen title -> display it
-        if (f is HasCustomTitle && f.getScreenTitle() != null)
-            activity.supportActionBar?.title = f.getScreenTitle()
-        else
-            activity.supportActionBar?.title = defaultTitle
+            // fragment has custom screen title -> display it
+            if (f is HasCustomTitle) toolbar.title = f.getScreenTitle()
+            else toolbar.title = defaultTitle
+
+            // fragment has custom action -> display it
+            if (f is HasCustomAction) createCustomToolbarAction(f.getCustomAction())
+            else toolbar.menu.clear()
+        }
     }
 
+    /**
+     * Method of updating UI with custom action. If custom implements [HasCustomAction].
+     */
+    private fun createCustomToolbarAction(action: CustomAction) {
+        toolbar!!.menu.clear()
+
+        val iconDrawable =
+            DrawableCompat.wrap(ContextCompat.getDrawable(activity, action.iconRes)!!)
+        iconDrawable.setTint(Color.WHITE)
+
+        val menuItem = toolbar.menu.add(action.textAction)
+        menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+        menuItem.icon = iconDrawable
+        menuItem.setOnMenuItemClickListener {
+            action.onCustomAction.run()
+            return@setOnMenuItemClickListener true
+        }
+    }
 
     /**
      * Method of "sending" result-data to the screen's view-model.
@@ -109,10 +136,7 @@ class StackFragmentNavigator(
      */
     private val fragmentCallbacks = object : FragmentManager.FragmentLifecycleCallbacks() {
         override fun onFragmentViewCreated(
-            fm: FragmentManager,
-            f: Fragment,
-            v: View,
-            savedInstanceState: Bundle?
+            fm: FragmentManager, f: Fragment, v: View, savedInstanceState: Bundle?
         ) {
             notifyScreenUpdates()
             publishResults(f)
