@@ -39,6 +39,7 @@ class UsersListViewModel(
 
     fun createRandomUser() {
         usersRepository.createNewRandomSelectedUser()
+        _screenTitle.value = usersRepository.getSelectedUser().name
         uiActions.showToast("New random user: ${usersRepository.getSelectedUser()}")
     }
 

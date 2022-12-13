@@ -37,6 +37,7 @@ class LanguagesListViewModel(
 
     fun createRandomLanguage() {
         languagesRepository.createNewRandomSelectedLanguage()
+        _screenTitle.value = languagesRepository.getSelectedLanguage().name
         uiActions.showToast("New random language: ${languagesRepository.getSelectedLanguage()}")
     }
 
