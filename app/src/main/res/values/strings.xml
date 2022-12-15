@@ -13,4 +13,7 @@
     <string name="selected">selected</string>
     <string name="user_photo_description">User photo</string>
     <string name="language_image_description">language image</string>
+    <string name="error_connection_title">No connection</string>
+    <string name="update">Update</string>
+    <string name="error_message_snackbar">Please check your internet connection.</string>
 </resources>

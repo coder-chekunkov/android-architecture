@@ -11,6 +11,7 @@ import com.cdr.core.utils.viewModelCreator
 import com.cdr.core.views.FragmentHolder
 import com.cdr.mvvm_prototype.databinding.ActivityMainBinding
 import com.cdr.mvvm_prototype.screens.home.HomeFragment
+import com.cdr.mvvm_prototype.screens.internet.InternetConnectionFragment
 
 class MainActivity : AppCompatActivity(), FragmentHolder {
 
@@ -33,7 +34,7 @@ class MainActivity : AppCompatActivity(), FragmentHolder {
             toolbar = binding.toolbar,
             defaultTitle = "My MVVM",
             animations = null
-        ) { HomeFragment.Screen() }
+        ) { if (checkInternetConnection()) HomeFragment.Screen() else InternetConnectionFragment.Screen() }
 
         navigator.onCreate(savedInstanceState)
     }
@@ -65,4 +66,5 @@ class MainActivity : AppCompatActivity(), FragmentHolder {
 
     override fun notifyScreenUpdates() = navigator.notifyScreenUpdates()
     override fun getActivityScopeViewModel(): ActivityScopeViewModel = viewModel
+    override fun checkInternetConnection(): Boolean = navigator.checkInternetConnection()
 }

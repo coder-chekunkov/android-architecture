@@ -7,7 +7,7 @@ import com.cdr.core.views.*
 import com.cdr.mvvm_prototype.R
 import com.cdr.mvvm_prototype.databinding.FragmentHomeBinding
 
-class HomeFragment : BaseFragment(R.layout.fragment_home), HasCustomTitle {
+class HomeFragment : BaseFragment(R.layout.fragment_home), HasCustomTitle, HasSeveralCustomActions {
 
     override val viewModel: HomeViewModel by screenViewModel()
     private lateinit var binding: FragmentHomeBinding
@@ -27,8 +27,8 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), HasCustomTitle {
             viewModel.selectedLanguage.observe(viewLifecycleOwner) {
                 languageTextView.text = it.name
                 Glide.with(requireContext()).load(it.res).circleCrop()
-                    .error(R.mipmap.ic_launcher_round)
-                    .placeholder(R.mipmap.ic_launcher_round).into(languagePhoto)
+                    .error(R.mipmap.ic_launcher_round).placeholder(R.mipmap.ic_launcher_round)
+                    .into(languagePhoto)
             }
 
             if (viewModel.isNewUser && viewModel.isNewLanguage) viewModel.onShowSnackbar(
@@ -45,6 +45,12 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), HasCustomTitle {
     }
 
     override fun getScreenTitle(): String = "Home \uD83C\uDFDA"
+    override fun getSeveralCustomActions(): SeveralCustomActions = SeveralCustomActions(
+        menuRes = R.menu.actions_home, onSeveralCustomActions = listOf(
+            Action(id = R.id.selectUserActionButton, action = { viewModel.onChangeUserPressed() }),
+            Action(id = R.id.selectLanguageActionButton, action = { viewModel.onChangeLanguagePressed() })
+        )
+    )
 
     class Screen : BaseScreen
 }

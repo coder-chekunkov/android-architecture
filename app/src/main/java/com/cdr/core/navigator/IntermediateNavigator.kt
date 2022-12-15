@@ -18,6 +18,13 @@ class IntermediateNavigator : Navigator {
     }
 
     /**
+     * Implementation of launching a new screen without adding it at the top of back stack.
+     */
+    override fun launch(screen: BaseScreen, addToBackStack: Boolean) = targetNavigator {
+        it.launch(screen, addToBackStack)
+    }
+
+    /**
      * Implementation of Go back to the previous screen and optionally send some results.
      */
     override fun goBack(result: Any?) = targetNavigator {

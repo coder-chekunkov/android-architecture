@@ -15,4 +15,10 @@ abstract class BaseFragment(layout: Int) : Fragment(layout) {
      * Call this method when activity controls (e.g. toolbar) should be re-rendered
      */
     fun notifyScreenUpdates() = (requireActivity() as FragmentHolder).notifyScreenUpdates()
+
+    /**
+     * Call this method to get status of internet connection.
+     */
+    fun checkInternetConnection(): Boolean =
+        (requireActivity() as FragmentHolder).checkInternetConnection()
 }

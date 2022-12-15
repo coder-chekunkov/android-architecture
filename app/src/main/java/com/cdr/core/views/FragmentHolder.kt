@@ -15,4 +15,9 @@ interface FragmentHolder {
      * Get the current implementations of dependencies from activity VM scope.
      */
     fun getActivityScopeViewModel(): ActivityScopeViewModel
+
+    /**
+     * @return status of internet connection (TRUE -> available; FALSE -> unavailable).
+     */
+    fun checkInternetConnection(): Boolean
 }
