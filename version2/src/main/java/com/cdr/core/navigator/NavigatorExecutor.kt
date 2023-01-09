@@ -5,7 +5,6 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import androidx.annotation.AnimRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
@@ -13,86 +12,34 @@ import androidx.core.view.forEach
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.NavDirections
-import androidx.navigation.navOptions
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import com.cdr.core.views.*
 import com.google.android.material.appbar.MaterialToolbar
 
 class NavigatorExecutor(
     private val activity: AppCompatActivity,
-    private val navController: NavController,
+    private var navController: NavController,
+    private val fragmentContainer: Int,
     private val toolbar: MaterialToolbar?,
     private val defaultTitle: String,
     private val topLevelDestinations: List<Int>,
-    private val animations: CustomAnimations?
-    ) : Navigator {
+) : Navigator {
 
     /**
-     * Launch new destination. - without arguments.
+     * Launching a new screen using a Navigation Controller.
      */
-    override fun launchDestination(destination: Int) = launchScreen(destination)
-
-    /**
-     * Launch new destination. - with arguments.
-     */
-    override fun launchDestination(destination: Int, args: Bundle?) =
-        launchScreen(destination, args)
-
-    /**
-     * Launching a new action.
-     */
-    override fun launchAction(action: Int) = launchScreen(action)
-
-    /**
-     * Launching new direction.
-     */
-    override fun launchDirection(direction: NavDirections) = launchScreen(direction)
-
-    /**
-     * Launch a root destination (declared when creating the navigator).
-     */
-    override fun launchRootDestination() { navController.popBackStack(topLevelDestinations.first(), false) }
-
-    /**
-     * Launch a previous destination.
-     */
-    override fun launchPreviousDestination() { navController.popBackStack() }
-
-    /**
-     * Implementation of launching new destination.
-     */
-    private fun launchScreen(destination: Int, args: Bundle? = null) {
-        // if animations is exist -> launch new screen with animation
-        // else -> launch new screen without animations
-        if (animations != null) navController.navigate(destination, args, navOptions {
-            anim {
-                enter = animations.enterAnim
-                exit = animations.exitAnim
-                popEnter = animations.popEnterAnim
-                popExit = animations.popExitAnim
-            }
-        }) else navController.navigate(destination, args)
+    override fun launchByNavController(navController: NavController, direction: NavDirections) {
+        navController.navigate(direction)
     }
 
     /**
-     * Implementation of launching new action.
+     * Launching a new screen using a Top Navigation Controller.
      */
-    private fun launchScreen(action: Int) = navController.navigate(action)
-
-    /**
-     * Implementation of launching new direction.
-     */
-    private fun launchScreen(direction: NavDirections) {
-        // if animations is exist -> launch new screen with animation
-        // else -> launch new screen without animations
-        if (animations != null) navController.navigate(direction, navOptions {
-            anim {
-                enter = animations.enterAnim
-                exit = animations.exitAnim
-                popEnter = animations.popEnterAnim
-                popExit = animations.popExitAnim
-            }
-        }) else navController.navigate(direction)
+    override fun launchByTopNavController(fragment: Fragment, direction: NavDirections) {
+        findTopNavController(fragment).navigate(direction)
     }
 
     /**
@@ -117,19 +64,59 @@ class NavigatorExecutor(
     fun onSupportNavigateUp() = navController.navigateUp()
 
     /**
+     * A method of "activating" of Navigation Controller.
+     */
+    fun onNavControllerActivated(navController: NavController?) {
+        if (this.navController == navController) return
+        this.navController.removeOnDestinationChangedListener(destinationListener)
+        navController?.addOnDestinationChangedListener(destinationListener)
+        if (navController != null) {
+            this.navController = navController
+        }
+    }
+
+    /**
+     * Destination changer listener.
+     */
+    private val destinationListener =
+        NavController.OnDestinationChangedListener { _, destination, _ ->
+            activity.supportActionBar?.setDisplayHomeAsUpEnabled(!isStartDestination(destination))
+        }
+
+    /**
+     * Checking if destination is start on graph.
+     */
+    private fun isStartDestination(destination: NavDestination?): Boolean {
+        if (destination == null) return false
+        val graph = destination.parent ?: return false
+        val startDestinations = topLevelDestinations + graph.startDestinationId
+        return startDestinations.contains(destination.id)
+    }
+
+    /**
+     * Find NavController from high levels.
+     */
+    private fun findTopNavController(fragment: Fragment): NavController {
+        val topLevelHost = fragment.requireActivity().supportFragmentManager
+            .findFragmentById(fragmentContainer) as NavHostFragment?
+        return topLevelHost?.navController ?: fragment.findNavController()
+    }
+
+    /**
      * Method to update items on activity (e.g. toolbar).
      */
     fun notifyScreenUpdates() {
-        val f =
+        val fragments = mutableListOf<Fragment>()
+        var f =
             activity.supportFragmentManager.primaryNavigationFragment?.childFragmentManager?.fragments?.first()
+        while (f?.childFragmentManager?.primaryNavigationFragment?.childFragmentManager?.fragments?.first() != null) {
+            fragments.add(f)
+            f =
+                f.childFragmentManager.primaryNavigationFragment?.childFragmentManager?.fragments?.first()
+        }
 
         // if toolbar is exist on activity
         if (toolbar != null) {
-            // more than 1 screen -> show back button in the toolbar
-            if (topLevelDestinations.contains(navController.currentDestination?.id))
-                activity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
-            else activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
             // fragment has custom screen title -> display it
             if (f is HasCustomTitle) toolbar.title = f.getScreenTitle()
             else toolbar.title = defaultTitle
@@ -142,6 +129,8 @@ class NavigatorExecutor(
             if (f is HasCustomMultipleAction) createCustomMultipleToolbarActions(f.getMultipleCustomAction())
             else activity.invalidateOptionsMenu()
         }
+
+        onNavControllerActivated(f?.findNavController())
     }
 
     /**
@@ -193,14 +182,4 @@ class NavigatorExecutor(
             notifyScreenUpdates()
         }
     }
-
-    /**
-     * Class-support for animation-appearing of new screen.
-     */
-    class CustomAnimations(
-        @AnimRes val enterAnim: Int,
-        @AnimRes val exitAnim: Int,
-        @AnimRes val popEnterAnim: Int,
-        @AnimRes val popExitAnim: Int,
-    )
 }

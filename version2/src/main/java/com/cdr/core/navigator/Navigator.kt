@@ -1,6 +1,8 @@
 package com.cdr.core.navigator
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 
 /**
@@ -9,32 +11,12 @@ import androidx.navigation.NavDirections
 interface Navigator {
 
     /**
-     * Launch a new destination using ID of destination from Navigation Graph. - without arguments.
+     * Launch a new direction using a Navigation Controller.
      */
-    fun launchDestination(destination: Int)
+    fun launchByNavController(navController: NavController, direction: NavDirections)
 
     /**
-     * Launch a new destination using ID of destination from Navigation Graph. - with arguments.
+     * Launching a new direction using a Top Navigation Controller.
      */
-    fun launchDestination(destination: Int, args: Bundle?)
-
-    /**
-     * Launch a new action.
-     */
-    fun launchAction(action: Int)
-
-    /**
-     * Launch a new direction.
-     */
-    fun launchDirection(direction: NavDirections)
-    
-    /**
-     * Launch a root destination.
-     */
-    fun launchRootDestination()
-
-    /**
-     * Launch a previous destination.
-     */
-    fun launchPreviousDestination()
+    fun launchByTopNavController(fragment: Fragment, direction: NavDirections)
 }
