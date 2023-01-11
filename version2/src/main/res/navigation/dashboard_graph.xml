@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dashboard_graph"
+    app:startDestination="@id/dashboardFragment">
+
+    <fragment
+        android:id="@+id/dashboardFragment"
+        android:name="com.cdr.mvvm_prototype.screens.root.tabs.dashboard.DashboardFragment"
+        android:label="DashboardFragment"
+        tools:layout="@layout/fragment_dashboard">
+        <action
+            android:id="@+id/action_dashboardFragment_to_usersListFragment"
+            app:destination="@id/usersListFragment" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_languageListFragment"
+            app:destination="@id/languageListFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/usersListFragment"
+        android:name="com.cdr.mvvm_prototype.screens.root.tabs.dashboard.users_list.UsersListFragment"
+        android:label="UsersListFragment"
+        tools:layout="@layout/fragment_users_list">
+        <action
+            android:id="@+id/action_usersListFragment_to_createUserFragment"
+            app:destination="@id/createUserFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/languageListFragment"
+        android:name="com.cdr.mvvm_prototype.screens.root.tabs.dashboard.language_list.LanguageListFragment"
+        android:label="LanguageListFragment"
+        tools:layout="@layout/fragment_language_list"/>
+
+    <fragment
+        android:id="@+id/createUserFragment"
+        android:name="com.cdr.mvvm_prototype.screens.root.tabs.dashboard.create_user.CreateUserFragment"
+        android:label="CreateUserFragment"
+        tools:layout="@layout/fragment_create_user"/>
+</navigation>

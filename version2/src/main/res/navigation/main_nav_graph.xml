@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav_graph"
+    app:startDestination="@id/internetConnectionFragment">
+
+    <fragment
+        android:id="@+id/internetConnectionFragment"
+        android:name="com.cdr.mvvm_prototype.screens.internet.InternetConnectionFragment"
+        android:label="InternetConnectionFragment"
+        tools:layout="@layout/fragment_no_internet">
+        <action
+            android:id="@+id/action_internetConnectionFragment_to_rootFragment"
+            app:destination="@id/rootFragment"
+            app:enterAnim="@anim/enter"
+            app:exitAnim="@anim/exit"
+            app:popEnterAnim="@anim/pop_enter"
+            app:popExitAnim="@anim/pop_exit"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/rootFragment"
+        android:name="com.cdr.mvvm_prototype.screens.root.RootFragment"
+        android:label="RootFragment"
+        tools:layout="@layout/fragment_root">
+        <action
+            android:id="@+id/action_rootFragment_to_editProfileFragment"
+            app:destination="@id/editProfileFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.cdr.mvvm_prototype.screens.root.tabs.profile.edit_profile.EditProfileFragment"
+        android:label="EditProfileFragment"
+        tools:layout="@layout/fragment_edit_profile" />
+</navigation>

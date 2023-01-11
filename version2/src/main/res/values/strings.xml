@@ -1,3 +1,36 @@
 <resources>
-    <string name="app_name">version2</string>
+    <string name="app_name">MVVM - version 2</string>
+    <string name="text_edit_button">Edit Text</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="new_color">New</string>
+    <string name="change_language">Change Language</string>
+    <string name="change_user">Change User</string>
+    <string name="message_new_user_and_language">User and Language have been changed!</string>
+    <string name="message_new_user">User has been changed!</string>
+    <string name="message_new_language">Language has been changed!</string>
+    <string name="selected">selected</string>
+    <string name="user_photo_description">User photo</string>
+    <string name="language_image_description">language image</string>
+    <string name="error_connection_title">No connection</string>
+    <string name="update">Update</string>
+    <string name="error_message_snackbar">Please check your internet connection.</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="profile">Profile</string>
+    <string name="information">Information</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="create_user">Create User</string>
+    <string name="about_the_application">About the application</string>
+    <string name="application_name">Application name</string>
+    <string name="version_name">Version name</string>
+    <string name="version_code">Version code</string>
+    <string name="version_code_2_0">2.0</string>
+    <string name="current_language">Language (%1$s)</string>
+    <string name="hint_name_of_user">Name of user</string>
+    <string name="hint_name_of_company">Name of company</string>
+    <string name="make_new_user_selected">Make new user selected</string>
+    <string name="message_error_empty">Field cannot be empty!</string>
+    <string name="message_error_empty_snackbar">One or more fields are empty! Fill in all the details.</string>
+    <string name="message_user_created_snackbar">New user has been created!</string>
+    <string name="message_profile_edited_snackbar">Profile has been edited!</string>
 </resources>
