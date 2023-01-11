@@ -43,6 +43,20 @@ class NavigatorExecutor(
     }
 
     /**
+     * PopBackStack using a Navigation Controller.
+     */
+    override fun popBackStackByNavController(navController: NavController) {
+        navController.popBackStack()
+    }
+
+    /**
+     * PopBackStack using a Top Navigation Controller.
+     */
+    override fun popBackStackByTopNavController(fragment: Fragment) {
+        findTopNavController(fragment).popBackStack()
+    }
+
+    /**
      * A method that duplicates the Activity lifecycle-method.
      */
     @SuppressLint("UseSupportActionBar")
@@ -66,8 +80,7 @@ class NavigatorExecutor(
     /**
      * A method of "activating" of Navigation Controller.
      */
-    fun onNavControllerActivated(navController: NavController?) {
-        if (this.navController == navController) return
+    private fun onNavControllerActivated(navController: NavController?) {
         this.navController.removeOnDestinationChangedListener(destinationListener)
         navController?.addOnDestinationChangedListener(destinationListener)
         if (navController != null) {
@@ -106,11 +119,9 @@ class NavigatorExecutor(
      * Method to update items on activity (e.g. toolbar).
      */
     fun notifyScreenUpdates() {
-        val fragments = mutableListOf<Fragment>()
         var f =
             activity.supportFragmentManager.primaryNavigationFragment?.childFragmentManager?.fragments?.first()
         while (f?.childFragmentManager?.primaryNavigationFragment?.childFragmentManager?.fragments?.first() != null) {
-            fragments.add(f)
             f =
                 f.childFragmentManager.primaryNavigationFragment?.childFragmentManager?.fragments?.first()
         }

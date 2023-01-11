@@ -1,6 +1,5 @@
 package com.cdr.core.navigator
 
-import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
@@ -19,4 +18,14 @@ interface Navigator {
      * Launching a new direction using a Top Navigation Controller.
      */
     fun launchByTopNavController(fragment: Fragment, direction: NavDirections)
+
+    /**
+     * PopBackStack using a Navigation Controller.
+     */
+    fun popBackStackByNavController(navController: NavController)
+
+    /**
+     * PopBackStack using a Top Navigation Controller.
+     */
+    fun popBackStackByTopNavController(fragment: Fragment)
 }

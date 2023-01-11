@@ -1,6 +1,5 @@
 package com.cdr.core.navigator
 
-import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
@@ -25,6 +24,20 @@ class IntermediateNavigator : Navigator {
      */
     override fun launchByTopNavController(fragment: Fragment, direction: NavDirections) = targetNavigator {
         it.launchByTopNavController(fragment, direction)
+    }
+
+    /**
+     * Implementation of PopBackStack using a Navigation Controller.
+     */
+    override fun popBackStackByNavController(navController: NavController) = targetNavigator {
+        it.popBackStackByNavController(navController)
+    }
+
+    /**
+     * Implementation of PopBackStack using a Top Navigation Controller.
+     */
+    override fun popBackStackByTopNavController(fragment: Fragment) = targetNavigator {
+        it.popBackStackByTopNavController(fragment)
     }
 
     /**
