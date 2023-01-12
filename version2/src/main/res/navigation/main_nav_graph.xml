@@ -13,6 +13,8 @@
         <action
             android:id="@+id/action_internetConnectionFragment_to_rootFragment"
             app:destination="@id/rootFragment"
+            app:popUpTo="@+id/internetConnectionFragment"
+            app:popUpToInclusive="true"
             app:enterAnim="@anim/enter"
             app:exitAnim="@anim/exit"
             app:popEnterAnim="@anim/pop_enter"
