@@ -23,7 +23,10 @@ class MainActivity : AppCompatActivity(), FragmentHolder, IsInternetConnection {
     private val viewModel by viewModelCreator<ActivityScopeViewModel> {
         ActivityScopeViewModel(
             navigator = IntermediateNavigator(),
-            uiActions = AndroidUiActions(applicationContext)
+            uiActions = AndroidUiActions(
+                activity = this,
+                appContext = applicationContext
+            )
         )
     }
 
