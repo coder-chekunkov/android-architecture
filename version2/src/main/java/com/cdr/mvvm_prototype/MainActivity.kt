@@ -23,14 +23,13 @@ class MainActivity : AppCompatActivity(), FragmentHolder, IsInternetConnection {
     private val viewModel by viewModelCreator<ActivityScopeViewModel> {
         ActivityScopeViewModel(
             navigator = IntermediateNavigator(),
-            uiActions = AndroidUiActions(
-                activity = this,
-                appContext = applicationContext
-            )
+            uiActions = AndroidUiActions(this),
+            dependencies = getApplicationDependencies()
         )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Dependencies.init(applicationContext)
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater).also { setContentView(it.root) }
 
@@ -75,6 +74,11 @@ class MainActivity : AppCompatActivity(), FragmentHolder, IsInternetConnection {
     override fun notifyScreenUpdates() = navigator.notifyScreenUpdates()
     override fun getActivityScopeViewModel(): ActivityScopeViewModel = viewModel
     override fun checkInternetConnection(): Boolean = isInternetAvailable()
+    override fun getApplicationDependencies(): List<Any> = listOf(
+        Dependencies.usersRepository,
+        Dependencies.languageRepository,
+        Dependencies.profileRepository
+    )
 
     private fun createNavigationController(): NavController {
         val navHost =

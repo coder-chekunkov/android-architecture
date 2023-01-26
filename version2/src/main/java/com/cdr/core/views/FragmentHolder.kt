@@ -15,4 +15,9 @@ interface FragmentHolder {
      * Get the current implementations of dependencies from activity VM scope.
      */
     fun getActivityScopeViewModel(): ActivityScopeViewModel
+
+    /**
+     * Get the list of application dependencies.
+     */
+    fun getApplicationDependencies(): List<Any>
 }

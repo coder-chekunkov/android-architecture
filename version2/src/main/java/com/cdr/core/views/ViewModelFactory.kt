@@ -5,7 +5,6 @@ import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.savedstate.SavedStateRegistryOwner
-import com.cdr.core.BaseApplication
 import java.lang.reflect.Constructor
 
 /**
@@ -49,15 +48,13 @@ class ViewModelFactory(
  * Use this method for getting view-models from your fragments
  */
 inline fun <reified VM : ViewModel> BaseFragment.screenViewModel() = viewModels<VM> {
-    val application = requireActivity().application as BaseApplication
-
     val activityScopeViewModel = (requireActivity() as FragmentHolder).getActivityScopeViewModel()
 
     // forming the list of available dependencies:
     // - singleton scope dependencies (repositories) -> from App class
     // - activity VM scope dependencies -> from ActivityScopeViewModel
     // - screen VM scope dependencies -> screen args
-    val dependencies = listOf(activityScopeViewModel) + application.models
+    val dependencies = listOf(activityScopeViewModel) + activityScopeViewModel.dependencies
 
     // creating factory
     ViewModelFactory(dependencies, this)
