@@ -3,6 +3,7 @@ package com.cdr.mvvm_prototype.screens.root.tabs.dashboard.language_list
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
+import com.cdr.core.utils.collectFlow
 import com.cdr.core.views.BaseFragment
 import com.cdr.core.views.HasCustomTitle
 import com.cdr.core.views.screenViewModel
@@ -19,8 +20,9 @@ class LanguageListFragment : BaseFragment(R.layout.fragment_language_list), HasC
         binding = FragmentLanguageListBinding.bind(view)
 
         val adapter = LanguageAdapter(viewModel.languageActionListener)
-        viewModel.languages.observe(viewLifecycleOwner) { adapter.data = it }
-        viewModel.languageTitle.observe(viewLifecycleOwner) { notifyScreenUpdates() }
+
+        collectFlow(viewModel.languages) { adapter.data = it }
+        collectFlow(viewModel.languageTitle) { notifyScreenUpdates() }
 
         with(binding) {
             languagesRecyclerView.adapter = adapter

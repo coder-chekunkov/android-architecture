@@ -2,8 +2,6 @@ package com.cdr.mvvm_prototype.screens.root.tabs.profile.edit_profile
 
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.cdr.core.navigator.Navigator
 import com.cdr.core.uiactions.UiActions
 import com.cdr.core.views.BaseViewModel
@@ -11,6 +9,9 @@ import com.cdr.mvvm_prototype.model.profile.Profile
 import com.cdr.mvvm_prototype.model.profile.ProfileListener
 import com.cdr.mvvm_prototype.model.profile.ProfileRepository
 import com.cdr.version2.R
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 class EditProfileViewModel(
     private val navigator: Navigator,
@@ -18,8 +19,8 @@ class EditProfileViewModel(
     private val profileRepository: ProfileRepository
 ) : BaseViewModel() {
 
-    private val _profile = MutableLiveData<Profile>()
-    val profile: LiveData<Profile> = _profile
+    private val _profile = MutableStateFlow<Profile?>(null)
+    val profile: StateFlow<Profile?> = _profile.asStateFlow()
 
     private val profileListener: ProfileListener = { _profile.value = it }
 

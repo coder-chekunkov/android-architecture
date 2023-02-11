@@ -1,23 +1,24 @@
 package com.cdr.mvvm_prototype.screens.root.tabs.dashboard.language_list
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.cdr.core.uiactions.UiActions
 import com.cdr.core.views.BaseViewModel
 import com.cdr.mvvm_prototype.model.languages.Language
 import com.cdr.mvvm_prototype.model.languages.LanguageRepository
 import com.cdr.mvvm_prototype.model.languages.ListLanguageListener
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 class LanguageListViewModel(
     private val languageRepository: LanguageRepository,
     private val uiActions: UiActions
 ) : BaseViewModel() {
 
-    private val _languages = MutableLiveData<List<Language>>()
-    val languages: LiveData<List<Language>> = _languages
+    private val _languages = MutableStateFlow(emptyList<Language>())
+    val languages: StateFlow<List<Language>> = _languages.asStateFlow()
 
-    private val _languageTitle = MutableLiveData<String>()
-    val languageTitle: LiveData<String> = _languageTitle
+    private val _languageTitle = MutableStateFlow("")
+    val languageTitle: StateFlow<String> = _languageTitle.asStateFlow()
 
     private val listener: ListLanguageListener = { _languages.value = it }
 

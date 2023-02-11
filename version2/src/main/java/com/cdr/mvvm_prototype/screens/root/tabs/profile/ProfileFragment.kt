@@ -2,6 +2,7 @@ package com.cdr.mvvm_prototype.screens.root.tabs.profile
 
 import android.os.Bundle
 import android.view.View
+import com.cdr.core.utils.collectFlow
 import com.cdr.core.views.*
 import com.cdr.version2.R
 import com.cdr.version2.databinding.FragmentProfileBinding
@@ -16,9 +17,9 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile), HasCustomTitle,
         binding = FragmentProfileBinding.bind(view)
 
         with(binding) {
-            viewModel.profile.observe(viewLifecycleOwner) { profile ->
-                profileNameTextView.text = profile.name
-                profileCompanyTextView.text = profile.company
+            collectFlow(viewModel.profile) { profile ->
+                profileNameTextView.text = profile?.name
+                profileCompanyTextView.text = profile?.company
             }
 
             editProfileButton.setOnClickListener { viewModel.launchEditProfileScreen(this@ProfileFragment) }

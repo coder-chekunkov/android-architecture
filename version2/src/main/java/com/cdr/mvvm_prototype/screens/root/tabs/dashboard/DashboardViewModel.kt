@@ -1,7 +1,5 @@
 package com.cdr.mvvm_prototype.screens.root.tabs.dashboard
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
 import com.cdr.core.navigator.Navigator
 import com.cdr.core.views.BaseViewModel
@@ -11,6 +9,9 @@ import com.cdr.mvvm_prototype.model.languages.SelectedLanguageListener
 import com.cdr.mvvm_prototype.model.users.SelectedUserListener
 import com.cdr.mvvm_prototype.model.users.User
 import com.cdr.mvvm_prototype.model.users.UserRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 class DashboardViewModel(
     private val navigator: Navigator,
@@ -18,11 +19,11 @@ class DashboardViewModel(
     private val userRepository: UserRepository
 ) : BaseViewModel() {
 
-    private val _selectedUser = MutableLiveData<User>()
-    val selectedUser: LiveData<User> = _selectedUser
+    private val _selectedUser = MutableStateFlow<User?>(null)
+    val selectedUser: StateFlow<User?> = _selectedUser.asStateFlow()
 
-    private val _selectedLanguage = MutableLiveData<Language>()
-    val selectedLanguage: LiveData<Language> = _selectedLanguage
+    private val _selectedLanguage = MutableStateFlow<Language?>(null)
+    val selectedLanguage: StateFlow<Language?> = _selectedLanguage.asStateFlow()
 
     private val selectedLanguageListener: SelectedLanguageListener =
         { _selectedLanguage.value = it }

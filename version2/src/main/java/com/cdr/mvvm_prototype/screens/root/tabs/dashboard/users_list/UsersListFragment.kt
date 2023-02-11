@@ -5,6 +5,7 @@ import android.view.View
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.cdr.core.utils.collectFlow
 import com.cdr.core.views.*
 import com.cdr.version2.R
 import com.cdr.version2.databinding.FragmentUsersListBinding
@@ -22,8 +23,8 @@ class UsersListFragment : BaseFragment(R.layout.fragment_users_list), HasCustomT
         navController = findNavController()
 
         val adapter = UsersAdapter(viewModel.userActionListener)
-        viewModel.users.observe(viewLifecycleOwner) { adapter.data = it }
-        viewModel.userTitle.observe(viewLifecycleOwner) { notifyScreenUpdates() }
+        collectFlow(viewModel.users) { adapter.data = it }
+        collectFlow(viewModel.userTitle) { notifyScreenUpdates() }
 
         with(binding) {
             usersListRecyclerView.adapter = adapter
@@ -31,7 +32,7 @@ class UsersListFragment : BaseFragment(R.layout.fragment_users_list), HasCustomT
         }
     }
 
-    override fun getScreenTitle(): String = viewModel.userTitle.value.toString()
+    override fun getScreenTitle(): String = viewModel.userTitle.value
     override fun getCustomAction(): CustomAction = CustomAction(
         iconRes = R.drawable.ic_create_user,
         textAction = getString(R.string.create_user),

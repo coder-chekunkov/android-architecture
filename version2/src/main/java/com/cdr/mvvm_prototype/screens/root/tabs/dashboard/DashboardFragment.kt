@@ -5,6 +5,7 @@ import android.view.View
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.cdr.core.utils.collectFlow
 import com.cdr.core.views.*
 import com.cdr.version2.R
 import com.cdr.version2.databinding.FragmentDashboardBinding
@@ -22,21 +23,21 @@ class DashboardFragment : BaseFragment(R.layout.fragment_dashboard), HasCustomTi
         navController = findNavController()
 
         with(binding) {
-            viewModel.selectedUser.observe(viewLifecycleOwner) {
-                usernameTextView.text = it.name
-                companyTextView.text = it.company
+            collectFlow(viewModel.selectedUser) {
+                usernameTextView.text = it?.name
+                companyTextView.text = it?.company
                 Glide.with(requireContext())
-                    .load(it.photo)
+                    .load(it?.photo)
                     .circleCrop()
                     .error(R.drawable.ic_account)
                     .placeholder(R.drawable.ic_account)
                     .into(userImageView)
             }
 
-            viewModel.selectedLanguage.observe(viewLifecycleOwner) {
-                languageTextView.text = it.name
+            collectFlow(viewModel.selectedLanguage) {
+                languageTextView.text = it?.name
                 Glide.with(requireContext())
-                    .load(it.res)
+                    .load(it?.res)
                     .circleCrop()
                     .error(R.mipmap.ic_launcher_round)
                     .placeholder(R.mipmap.ic_launcher_round)

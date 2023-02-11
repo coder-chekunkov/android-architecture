@@ -2,6 +2,7 @@ package com.cdr.mvvm_prototype.screens.root.tabs.profile.edit_profile
 
 import android.os.Bundle
 import android.view.View
+import com.cdr.core.utils.collectFlow
 import com.cdr.core.views.BaseFragment
 import com.cdr.core.views.HasCustomTitle
 import com.cdr.core.views.screenViewModel
@@ -18,9 +19,9 @@ class EditProfileFragment : BaseFragment(R.layout.fragment_edit_profile), HasCus
         binding = FragmentEditProfileBinding.bind(view)
 
         with(binding) {
-            viewModel.profile.observe(viewLifecycleOwner) { profile ->
-                profileNameEditText.setText(profile.name)
-                companyEditText.setText(profile.company)
+            collectFlow(viewModel.profile) { profile ->
+                profileNameEditText.setText(profile?.name)
+                companyEditText.setText(profile?.company)
             }
 
             canselButton.setOnClickListener { viewModel.cansel(this@EditProfileFragment) }
